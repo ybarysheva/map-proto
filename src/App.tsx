@@ -64,7 +64,6 @@ export default function App() {
     const list = centers
       .filter((c) => {
         if (filters.types.length && !filters.types.includes(c.type)) return false;
-        if (filters.borough && c.borough !== filters.borough) return false;
         if (filters.pets && !c.pets) return false;
         if (filters.wheelchair && !c.wheelchair) return false;
         if (filters.when !== 'any' && !isOpenAt(c, minute)) return false;
@@ -155,7 +154,7 @@ export default function App() {
       />
 
       <main className="main">
-        {/* List comes first in reading order; CSS places it on the right on desktop */}
+        {/* List comes first in reading order and sits on the left on desktop */}
         <ResultsList
           results={results}
           total={centers.length}

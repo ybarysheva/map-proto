@@ -1,4 +1,4 @@
-import { BOROUGHS, CENTER_TYPES, type CenterType } from '../lib';
+import { CENTER_TYPES, type CenterType } from '../lib';
 import { markerSvg } from '../icons';
 import type { T } from '../i18n';
 import { activeFilterCount, DEFAULT_FILTERS, type Filters, type When } from '../state';
@@ -80,20 +80,6 @@ export default function FiltersPanel({ filters: f, onChange, resultCount, open, 
             ))}
           </div>
         </fieldset>
-
-        <div className="filter">
-          <label htmlFor="borough" className="legend-like">
-            {t('borough')}
-          </label>
-          <select id="borough" value={f.borough} onChange={(e) => set({ borough: e.target.value })}>
-            <option value="">{t('allBoroughs')}</option>
-            {BOROUGHS.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
-        </div>
 
         <fieldset className="filter">
           <legend>{t('features')}</legend>

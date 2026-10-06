@@ -30,8 +30,6 @@ const en = {
   openAt: 'Open at',
   time: 'Time',
   type: 'Location type',
-  borough: 'Borough',
-  allBoroughs: 'All boroughs',
   features: 'Features',
   pets: 'Pets allowed',
   wheelchair: 'Wheelchair accessible',
@@ -80,7 +78,6 @@ const en = {
   zoomIn: 'Zoom in',
   zoomOut: 'Zoom out',
   sample: 'Sample data for prototyping',
-  cluster: 'Group of locations — select to zoom in',
   locations: 'locations',
 };
 
@@ -107,8 +104,6 @@ const es: Record<StringKey, string> = {
   openAt: 'Abierto a las',
   time: 'Hora',
   type: 'Tipo de lugar',
-  borough: 'Distrito',
-  allBoroughs: 'Todos los distritos',
   features: 'Características',
   pets: 'Se permiten mascotas',
   wheelchair: 'Accesible en silla de ruedas',
@@ -157,7 +152,6 @@ const es: Record<StringKey, string> = {
   zoomIn: 'Acercar',
   zoomOut: 'Alejar',
   sample: 'Datos de muestra para el prototipo',
-  cluster: 'Grupo de lugares — seleccione para acercar',
   locations: 'lugares',
 };
 
@@ -182,8 +176,6 @@ const zh: Record<StringKey, string> = {
   openAt: '开放时间为',
   time: '时间',
   type: '地点类型',
-  borough: '行政区',
-  allBoroughs: '所有行政区',
   features: '设施',
   pets: '允许携带宠物',
   wheelchair: '无障碍轮椅通道',
@@ -232,7 +224,6 @@ const zh: Record<StringKey, string> = {
   zoomIn: '放大',
   zoomOut: '缩小',
   sample: '原型示例数据',
-  cluster: '地点群组 — 点击放大',
   locations: '个地点',
 };
 
@@ -257,8 +248,6 @@ const ar: Record<StringKey, string> = {
   openAt: 'مفتوح في',
   time: 'الوقت',
   type: 'نوع الموقع',
-  borough: 'الحي',
-  allBoroughs: 'جميع الأحياء',
   features: 'المزايا',
   pets: 'يُسمح بالحيوانات الأليفة',
   wheelchair: 'مناسب للكراسي المتحركة',
@@ -307,7 +296,6 @@ const ar: Record<StringKey, string> = {
   zoomIn: 'تكبير',
   zoomOut: 'تصغير',
   sample: 'بيانات نموذجية للنموذج الأولي',
-  cluster: 'مجموعة مواقع — اختر للتكبير',
   locations: 'مواقع',
 };
 

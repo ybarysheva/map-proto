@@ -1,4 +1,4 @@
-import { daysSince, formatDate, STALE_DAYS, type Center } from '../lib';
+import type { Center } from '../lib';
 import { markerSvg } from '../icons';
 import type { Lang, T } from '../i18n';
 import type { Origin, When } from '../state';
@@ -43,7 +43,6 @@ export default function ResultsList({ results, total, origin, minute, when, lang
       ) : (
         <ol className="result-list">
           {results.map(({ c, miles }) => {
-            const stale = daysSince(c.updated) > STALE_DAYS;
             return (
               <li
                 key={c.id}
@@ -67,18 +66,7 @@ export default function ResultsList({ results, total, origin, minute, when, lang
                     {c.address}, {c.borough}
                     {c.crossStreet && <span className="cross"> · {c.crossStreet}</span>}
                   </p>
-                  <p className="meta">
-                    {miles !== null && <span className="distance">{t('miAway', { d: miles.toFixed(1) })}</span>}
-                    <span className={stale ? 'updated stale' : 'updated'}>
-                      {stale && (
-                        <svg viewBox="0 0 16 16" aria-hidden="true">
-                          <path d="M8 1.5 15 14H1z" fill="currentColor" />
-                          <path d="M8 6v3.5M8 11.5v.5" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
-                        </svg>
-                      )}
-                      {t('updated', { date: formatDate(c.updated, lang) })}
-                    </span>
-                  </p>
+                  {miles !== null && <p className="distance">{t('miAway', { d: miles.toFixed(1) })}</p>}
                 </div>
               </li>
             );

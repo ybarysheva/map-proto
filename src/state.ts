@@ -7,7 +7,6 @@ export interface Filters {
   when: When;
   at: string; // HH:MM
   types: CenterType[];
-  borough: string; // '' = all
   pets: boolean;
   wheelchair: boolean;
 }
@@ -18,13 +17,12 @@ export const DEFAULT_FILTERS: Filters = {
   when: 'any',
   at: '16:30',
   types: [],
-  borough: '',
   pets: false,
   wheelchair: false,
 };
 
 export const activeFilterCount = (f: Filters) =>
-  (f.when !== 'any' ? 1 : 0) + f.types.length + (f.borough ? 1 : 0) + (f.pets ? 1 : 0) + (f.wheelchair ? 1 : 0);
+  (f.when !== 'any' ? 1 : 0) + f.types.length + (f.pets ? 1 : 0) + (f.wheelchair ? 1 : 0);
 
 /* ---------- Deep links: everything shareable lives in the URL ---------- */
 
@@ -52,7 +50,6 @@ export function readUrl(): UrlState {
       types: (p.get('type')?.split(',') ?? []).filter((t): t is CenterType =>
         CENTER_TYPES.includes(t as CenterType),
       ),
-      borough: p.get('borough') ?? '',
       pets: p.get('pets') === '1',
       wheelchair: p.get('wheelchair') === '1',
     },
@@ -66,7 +63,6 @@ export function buildUrl({ lang, filters: f, origin, selectedId }: UrlState) {
   if (f.when !== 'any') p.set('when', f.when);
   if (f.when === 'at') p.set('at', f.at);
   if (f.types.length) p.set('type', f.types.join(','));
-  if (f.borough) p.set('borough', f.borough);
   if (f.pets) p.set('pets', '1');
   if (f.wheelchair) p.set('wheelchair', '1');
   if (origin) {

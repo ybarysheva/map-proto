@@ -2,7 +2,6 @@ import Papa from 'papaparse';
 
 export type CenterType = 'hospital' | 'dropin' | 'bus';
 export const CENTER_TYPES: CenterType[] = ['hospital', 'dropin', 'bus'];
-export const BOROUGHS = ['Bronx', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island'];
 
 export interface Center {
   id: string;

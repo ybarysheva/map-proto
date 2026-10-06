@@ -13,18 +13,6 @@ export default function Legend({ t, defaultOpen }: { t: T; defaultOpen: boolean 
             {t(type)}
           </li>
         ))}
-        <li>
-          <span className="legend-badge" aria-hidden="true">
-            2
-          </span>
-          {t('multiple')}
-        </li>
-        <li>
-          <span className="legend-cluster" aria-hidden="true">
-            5
-          </span>
-          {t('cluster')}
-        </li>
       </ul>
     </details>
   );
