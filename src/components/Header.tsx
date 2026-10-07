@@ -1,16 +1,12 @@
 import { LANGUAGES, type Lang, type T } from '../i18n';
-import type { Origin } from '../state';
-import SearchBox from './SearchBox';
 
 interface Props {
   lang: Lang;
   onLang: (l: Lang) => void;
-  origin: Origin | null;
-  onOrigin: (o: Origin | null) => void;
   t: T;
 }
 
-export default function Header({ lang, onLang, origin, onOrigin, t }: Props) {
+export default function Header({ lang, onLang, t }: Props) {
   return (
     <header className="header">
       <div className="brand">
@@ -22,9 +18,9 @@ export default function Header({ lang, onLang, origin, onOrigin, t }: Props) {
           <p className="tagline">{t('tagline')}</p>
         </div>
       </div>
-      <SearchBox origin={origin} onOrigin={onOrigin} t={t} />
+      {/* Globe icon + current language name; the native select opens the menu */}
       <div className="lang">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
+        <svg className="lang-globe" viewBox="0 0 24 24" aria-hidden="true">
           <g fill="none" stroke="currentColor" strokeWidth="1.8">
             <circle cx="12" cy="12" r="9" />
             <path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" />
@@ -40,6 +36,9 @@ export default function Header({ lang, onLang, origin, onOrigin, t }: Props) {
             </option>
           ))}
         </select>
+        <svg className="lang-chevron" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </div>
     </header>
   );

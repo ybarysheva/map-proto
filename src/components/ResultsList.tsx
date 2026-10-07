@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Center } from '../lib';
 import { markerSvg } from '../icons';
 import type { Lang, T } from '../i18n';
@@ -14,9 +15,12 @@ interface Props {
   t: T;
   onSelect: (id: string) => void;
   onHighlight: (id: string | null) => void;
+  onCopyLink: () => void;
 }
 
-export default function ResultsList({ results, total, origin, minute, when, lang, t, onSelect, onHighlight }: Props) {
+export default function ResultsList({ results, total, origin, minute, when, lang, t, onSelect, onHighlight, onCopyLink }: Props) {
+  const [copied, setCopied] = useState(false);
+
   return (
     <section className="results" id="results" aria-labelledby="results-count" tabIndex={-1}>
       <div className="notice" role="note">
@@ -32,9 +36,24 @@ export default function ResultsList({ results, total, origin, minute, when, lang
       </div>
 
       <div className="results-head">
-        <h2 id="results-count" aria-live="polite">
-          {t('showing', { n: results.length, total })}
-        </h2>
+        <div className="results-head-row">
+          <h2 id="results-count" aria-live="polite">
+            {t('showing', { n: results.length, total })}
+          </h2>
+          <button
+            type="button"
+            className="link-with-icon"
+            aria-label={t('copyResultsLink')}
+            onClick={() => {
+              onCopyLink();
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2500);
+            }}
+          >
+            <LinkIcon />
+            {copied ? t('linkCopied') : t('copyLink')}
+          </button>
+        </div>
         {origin && <p className="sorted">{t('sortedBy', { place: origin.label })}</p>}
       </div>
 
@@ -64,7 +83,6 @@ export default function ResultsList({ results, total, origin, minute, when, lang
                   <Status c={c} minute={minute} when={when} lang={lang} t={t} />
                   <p className="address">
                     {c.address}, {c.borough}
-                    {c.crossStreet && <span className="cross"> · {c.crossStreet}</span>}
                   </p>
                   {miles !== null && <p className="distance">{t('miAway', { d: miles.toFixed(1) })}</p>}
                 </div>
@@ -75,5 +93,16 @@ export default function ResultsList({ results, total, origin, minute, when, lang
       )}
       <p className="sample-note">{t('sample')}</p>
     </section>
+  );
+}
+
+export function LinkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <g fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" />
+        <path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" />
+      </g>
+    </svg>
   );
 }

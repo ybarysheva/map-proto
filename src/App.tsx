@@ -4,6 +4,7 @@ import { LANGUAGES, translate, type Lang, type StringKey } from './i18n';
 import { activeFilterCount, buildUrl, readUrl, type Filters, type Origin } from './state';
 import MapView from './MapView';
 import Header from './components/Header';
+import SearchBox from './components/SearchBox';
 import FiltersPanel from './components/FiltersPanel';
 import ResultsList from './components/ResultsList';
 import CenterCard from './components/CenterCard';
@@ -102,7 +103,19 @@ export default function App() {
     setTimeout(() => setAnnouncement(msg), 50);
   };
 
+  // Shares the current results: filters, searched address and language, but no open card
+  const copyResultsLink = async () => {
+    const url = location.origin + buildUrl({ lang, filters, origin, selectedId: null });
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      /* clipboard blocked */
+    }
+    announce(t('linkCopied'));
+  };
+
   const filterCount = activeFilterCount(filters);
+  const search = <SearchBox origin={origin} onOrigin={setOrigin} t={t} />;
 
   return (
     <div className={`app view-${view}`}>
@@ -121,7 +134,9 @@ export default function App() {
         {t('skipToMap')}
       </a>
 
-      <Header lang={lang} onLang={setLang} origin={origin} onOrigin={setOrigin} t={t} />
+      <Header lang={lang} onLang={setLang} t={t} />
+
+      {isMobile && <div className="mobile-search">{search}</div>}
 
       {/* Mobile-only toolbar */}
       <div className="toolbar">
@@ -148,8 +163,11 @@ export default function App() {
         filters={filters}
         onChange={setFilters}
         resultCount={results.length}
+        compact={!isMobile}
         open={filtersOpen}
         onClose={() => setFiltersOpen(false)}
+        search={isMobile ? undefined : search}
+        lang={lang}
         t={t}
       />
 
@@ -165,6 +183,7 @@ export default function App() {
           t={t}
           onSelect={select}
           onHighlight={setHighlightId}
+          onCopyLink={copyResultsLink}
         />
         <div className="map-area" id="map">
           <MapView

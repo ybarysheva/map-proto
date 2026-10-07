@@ -14,6 +14,7 @@ import { markerSvg, TYPE_COLOR } from '../icons';
 import type { Lang, T } from '../i18n';
 import { centerLink, type Origin, type When } from '../state';
 import Status from './Status';
+import { LinkIcon } from './ResultsList';
 
 interface Props {
   stack: Center[]; // every center at this location (usually 1)
@@ -66,7 +67,7 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
   return (
     <dialog
       ref={ref}
-      className="card"
+      className="card-dialog"
       aria-labelledby="card-title"
       onCancel={(e) => {
         e.preventDefault();
@@ -74,7 +75,22 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
       }}
       onClick={(e) => e.target === ref.current && onClose()}
     >
-      <div className="card-inner">
+      {stack.length > 1 && (
+        <nav className="stack-pill" aria-label={t('multiple')}>
+          <button type="button" aria-label={t('prev')} onClick={() => onSelect(stack[(index - 1 + stack.length) % stack.length].id)}>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <span aria-live="polite">{t('stackOf', { i: index + 1, n: stack.length })}</span>
+          <button type="button" aria-label={t('next')} onClick={() => onSelect(stack[(index + 1) % stack.length].id)}>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </nav>
+      )}
+      <div className="card">
         <div className="photo" role="img" aria-label={t('photoAlt', { name: c.name })} style={{ ['--tone' as string]: TYPE_COLOR[c.type] }}>
           <span className="photo-marker" dangerouslySetInnerHTML={{ __html: markerSvg(c.type) }} />
           <span className="photo-tag" aria-hidden="true">
@@ -87,22 +103,6 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
           </svg>
         </button>
 
-        {stack.length > 1 && (
-          <nav className="stack-nav" aria-label={t('multiple')}>
-            <button type="button" className="icon-btn" aria-label={t('prev')} onClick={() => onSelect(stack[(index - 1 + stack.length) % stack.length].id)}>
-              <svg viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <span aria-live="polite">{t('stackOf', { i: index + 1, n: stack.length })}</span>
-            <button type="button" className="icon-btn" aria-label={t('next')} onClick={() => onSelect(stack[(index + 1) % stack.length].id)}>
-              <svg viewBox="0 0 20 20" aria-hidden="true">
-                <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </nav>
-        )}
-
         <div className="card-body">
           <p className="type-label with-marker">
             <span className="mini-marker" dangerouslySetInnerHTML={{ __html: markerSvg(c.type) }} />
@@ -114,7 +114,6 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
           <Status c={c} minute={minute} when={when} lang={lang} t={t} />
           <p className="address">
             {c.address}, {c.borough}, NY
-            {c.crossStreet && <span className="cross"> · {c.crossStreet}</span>}
           </p>
           {miles !== null && <p className="distance">{t('miAway', { d: miles.toFixed(1) })}</p>}
 
@@ -135,15 +134,6 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
               </svg>
               {t('directions')}
             </a>
-            <button type="button" className="btn" onClick={copy}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <g fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
-                  <path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1" />
-                  <path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1" />
-                </g>
-              </svg>
-              {copied ? t('linkCopied') : t('copyLink')}
-            </button>
           </div>
 
           <dl className="details">
@@ -173,18 +163,24 @@ export default function CenterCard({ stack, selectedId, origin, minute, when, la
             </div>
           </dl>
 
-          <p className={stale ? 'freshness stale' : 'freshness'}>
-            {stale && (
-              <svg viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M8 1.5 15 14H1z" fill="currentColor" />
-                <path d="M8 6v3.5M8 11.5v.5" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-            )}
-            <span>
-              {t('updated', { date: formatDate(c.updated, lang) })}
-              {stale && <> — {t('stale')}</>}
-            </span>
-          </p>
+          <div className="card-foot">
+            <p className={stale ? 'freshness stale' : 'freshness'}>
+              {stale && (
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M8 1.5 15 14H1z" fill="currentColor" />
+                  <path d="M8 6v3.5M8 11.5v.5" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
+              )}
+              <span>
+                {t('updated', { date: formatDate(c.updated, lang) })}
+                {stale && <> — {t('stale')}</>}
+              </span>
+            </p>
+            <button type="button" className="link-with-icon" onClick={copy}>
+              <LinkIcon />
+              {copied ? t('linkCopied') : t('copyLink')}
+            </button>
+          </div>
         </div>
       </div>
     </dialog>
